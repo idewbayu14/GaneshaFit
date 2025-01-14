@@ -68,7 +68,6 @@
         </div>
       </div>
 
-      <!-- Dropdown untuk memilih personal trainer -->
       <div class="mt-3" id="trainerDropdown" style="display: none;">
         <label for="id_pt">Pilih Personal Trainer</label>
         <select class="form-control" id="id_pt" name="id_pt">
@@ -77,8 +76,6 @@
         </select>
       </div>
     </div>
-
-
 
     <div class="form-group">
       <label class="form-label">Jenis Pengunjung</label>

@@ -176,25 +176,29 @@ if (isset($_POST['perpanjang'])) {
   $id_pt = isset($_POST['id_pt']) ? $_POST['id_pt'] : NULL; // Tangkap ID personal trainer
   $biaya = $_POST['total'];
 
-  if (empty($id_pengunjung)) {
-    echo '<script>showNotification("Gagal", "danger", "ID Pengunjung tidak boleh kosong")</script>';
-  } else {
-    if (!empty($tanggal_baru)) {
-      // Query untuk memperbarui data pengunjung
-      $query = "UPDATE pengunjung 
-                SET masa_berlaku = '$tanggal_baru', 
-                    biaya = '$biaya', 
-                    id_pt = " . ($id_pt ? "'$id_pt'" : "NULL") . " 
-                WHERE id_pengunjung = '$id_pengunjung';";
+  // Jenis pengunjung akan otomatis diubah menjadi "bulanan" saat perpanjangan
+  $nama_jenis_pengunjung = 'bulanan';
 
-      if (mysqli_query($conn, $query)) {
-        echo '<script>showNotification("Berhasil", "success", "Berhasil perpanjangan")</script>';
+  if (empty($id_pengunjung)) {
+      echo '<script>showNotification("Gagal", "danger", "ID Pengunjung tidak boleh kosong")</script>';
+  } else {
+      if (!empty($tanggal_baru)) {
+          // Query untuk memperbarui data pengunjung
+          $query = "UPDATE pengunjung 
+                    SET masa_berlaku = '$tanggal_baru', 
+                        biaya = '$biaya', 
+                        id_pt = " . ($id_pt ? "'$id_pt'" : "NULL") . ", 
+                        nama_jenis_pengunjung = '$nama_jenis_pengunjung'
+                    WHERE id_pengunjung = '$id_pengunjung';";
+
+          if (mysqli_query($conn, $query)) {
+              echo '<script>showNotification("Berhasil", "success", "Berhasil perpanjangan")</script>';
+          } else {
+              echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: ' . mysqli_error($conn) . '")</script>';
+          }
       } else {
-        echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: ' . mysqli_error($conn) . '")</script>';
+          echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: Tanggal baru kosong")</script>';
       }
-    } else {
-      echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: Tanggal baru kosong")</script>';
-    }
   }
 }
 

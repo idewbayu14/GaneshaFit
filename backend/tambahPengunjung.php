@@ -28,8 +28,10 @@ if (!empty($_POST['id_pengunjung_pendaftaran'])) {
         // Jika berhasil, simpan juga ke tabel catatan_kunjungan
         $id_kunjungan = "KJ_" . date("YmdHis") . bin2hex(random_bytes(4));
         $id_petugas = "PG01"; // ID petugas default
-        $queryKunjungan = "INSERT INTO catatan_kunjungan (id_kunjungan, id_pengunjung, id_petugas, waktu_kunjungan_masuk, tanggal, id_pt) 
-                           VALUES ('$id_kunjungan', '$id_pengunjung', '$id_petugas', NOW(), CURDATE(), '$id_pt')";
+
+        // Query tanpa memasukkan id_pt ke tabel catatan_kunjungan
+        $queryKunjungan = "INSERT INTO catatan_kunjungan (id_kunjungan, id_pengunjung, id_petugas, waktu_kunjungan_masuk, tanggal) 
+                           VALUES ('$id_kunjungan', '$id_pengunjung', '$id_petugas', NOW(), CURDATE())";
 
         if (mysqli_query($conn, $queryKunjungan)) {
             header("Location: ../index.php?page=pendaftaran&status=success");

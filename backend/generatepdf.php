@@ -1,6 +1,15 @@
 <?php
 require ('../fpdf/fpdf.php');
 include '../koneksi.php';
+session_start();  // Menambahkan session_start agar bisa mengakses session
+
+// Cek apakah sesi sudah ada, jika tidak, arahkan ke login
+if (!isset($_SESSION['id_petugas'])) {
+    header("Location: pages/login.php");
+    exit();
+}
+
+$nama_petugas = $_SESSION['nama_lengkap'];  // Mengambil nama petugas yang login
 
 date_default_timezone_set('Asia/Jakarta');
 $today = new DateTime();
@@ -18,12 +27,9 @@ $tanggal = "$year-$month-$date";
 $query ="SELECT nama_lengkap, nama_jenis_pengunjung, biaya from pengunjung where tgl_bergabung = '$tanggal'";
 $result = mysqli_query($conn,$query);
 
-
-
 $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 20);
-
 
 $pdf->Cell(71, 10, '', 0, 0);
 $pdf->Cell(59, 10, 'LAPORAN', 0, 0);
@@ -41,7 +47,7 @@ $pdf->Ln(10);
 $pdf->SetFont('Arial', '', 10);
 
 $pdf->Cell(130, 5, $formattedDate, 0, 0);
-$pdf->Cell(1, 5, 'Nama Petugas: mas pur', 0, 0);
+$pdf->Cell(1, 5, 'Nama Petugas: ' . $nama_petugas, 0, 0);  // Menampilkan nama petugas yang login
 
 $pdf->Ln(25);
 
@@ -61,22 +67,21 @@ $pdf->Cell(40, 5, 'Biaya', 1, 0, 'C');
 $pdf->Ln();
 $no = 0;
 $total = 0;
-    
-              while ($row = mysqli_fetch_assoc($result)) {
-                $pdf->Cell(10, 5, '', 0, 0, 'C');
-                $pdf->Cell(10, 5, $no + 1, 1, 0, 'C');
-                $pdf->Cell(80, 5, $row['nama_lengkap'], 1, 0, 'C');
-                $pdf->Cell(40, 5, $row['nama_jenis_pengunjung'], 1, 0, 'C');
-                $pdf->Cell(40, 5, "Rp.".$row['biaya'], 1, 0, 'C');
-                $pdf->Ln();
-                $no++;
-                $total += $row['biaya'] ;
-            }
-            
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $pdf->Cell(10, 5, '', 0, 0, 'C');
+    $pdf->Cell(10, 5, $no + 1, 1, 0, 'C');
+    $pdf->Cell(80, 5, $row['nama_lengkap'], 1, 0, 'C');
+    $pdf->Cell(40, 5, $row['nama_jenis_pengunjung'], 1, 0, 'C');
+    $pdf->Cell(40, 5, "Rp." . $row['biaya'], 1, 0, 'C');
+    $pdf->Ln();
+    $no++;
+    $total += $row['biaya'];
+}
 
 $pdf->Cell(10, 5, '', 0, 0, 'C');
 $pdf->Cell(130, 5, 'Total', 1, 0, 'C');
-$pdf->Cell(40, 5, "Rp. ". $total, 1, 0, 'C');
+$pdf->Cell(40, 5, "Rp. " . $total, 1, 0, 'C');
 
 $pdf->Ln(30);
 

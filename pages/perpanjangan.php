@@ -4,11 +4,9 @@ include 'koneksi.php';
 $nama = '';
 $no_handphone = '';
 $masa_berlaku_sebelum = '';
-
-
+$nama_jenis_pengunjung = '';
 
 if (isset($_POST['cari'])) {
-
   if (!empty($_POST['id_pengunjung'])) {
     $id_pengunjung = $_POST['id_pengunjung'];
     $query = "SELECT * FROM pengunjung WHERE id_pengunjung = '$id_pengunjung'";
@@ -19,6 +17,7 @@ if (isset($_POST['cari'])) {
       $nama = $pengunjung['nama_lengkap'];
       $no_handphone = $pengunjung['no_hp'];
       $masa_berlaku_sebelum = $pengunjung['masa_berlaku'];
+      $nama_jenis_pengunjung = $pengunjung['nama_jenis_pengunjung'];
     } else {
       ?>
       <script>
@@ -29,18 +28,14 @@ if (isset($_POST['cari'])) {
 
   } else {
     ?>
-
     <script>
       showNotification('Id Pengunjung kosong', 'danger', 'Harap isi id pengunjung');
     </script>
-
     <?php
   }
 }
 
-
 ?>
-
 
 <h3 class="fw-bold mb-3">Perpanjangan <i class="fas fa-calendar-alt" style="color: tomato"></i></h3>
 <h6 class="op-7 mb-2">Perpanjangan pengunjung GYM</h6>
@@ -85,10 +80,10 @@ if (isset($_POST['cari'])) {
   <input type="hidden" name="tanggal_awal" id="tanggal_awal" value="<?php echo $masa_berlaku_sebelum; ?>" />
 
   <div class="card">
-
-  <div class="form-group">
+    <div class="form-group">
       <label>Personal Trainer</label><br />
       <div class="d-flex">
+        <!-- Default: Tidak menggunakan Personal Trainer -->
         <div class="form-check">
           <input
             class="form-check-input"
@@ -102,6 +97,7 @@ if (isset($_POST['cari'])) {
             Gunakan
           </label>
         </div>
+        <!-- Default: Tidak menggunakan Personal Trainer (selected) -->
         <div class="form-check">
           <input
             class="form-check-input"
@@ -128,12 +124,11 @@ if (isset($_POST['cari'])) {
       </div>
     </div>
 
-  
-
     <div class="form-group">
       <label for="defaultSelect">Lama perpanjangan</label>
       <select class="form-select form-control" id="jumlah_bulan" name="jumlah_bulan">
-        <option value="1">1 bulan</option>
+        <!-- Set default value to 1 bulan -->
+        <option value="1" selected>1 bulan</option>
         <option value="2">2 bulan</option>
         <option value="3">3 bulan</option>
         <option value="4">4 bulan</option>
@@ -176,50 +171,29 @@ if (isset($_POST['perpanjang'])) {
   $id_pt = isset($_POST['id_pt']) ? $_POST['id_pt'] : NULL; // Tangkap ID personal trainer
   $biaya = $_POST['total'];
 
-  // Jenis pengunjung akan otomatis diubah menjadi "bulanan" saat perpanjangan
-  $nama_jenis_pengunjung = 'bulanan';
+  // Mengubah jenis pengunjung menjadi "bulanan"
+  $nama_jenis_pengunjung = 'bulanan'; // Ubah jenis pengunjung
 
   if (empty($id_pengunjung)) {
-      echo '<script>showNotification("Gagal", "danger", "ID Pengunjung tidak boleh kosong")</script>';
+    echo '<script>showNotification("Gagal", "danger", "ID Pengunjung tidak boleh kosong")</script>';
   } else {
-      if (!empty($tanggal_baru)) {
-          // Query untuk memperbarui data pengunjung
-          $query = "UPDATE pengunjung 
-                    SET masa_berlaku = '$tanggal_baru', 
-                        biaya = '$biaya', 
-                        id_pt = " . ($id_pt ? "'$id_pt'" : "NULL") . ", 
-                        nama_jenis_pengunjung = '$nama_jenis_pengunjung'
-                    WHERE id_pengunjung = '$id_pengunjung';";
+    if (!empty($tanggal_baru)) {
+      // Query untuk memperbarui data pengunjung
+      $query = "UPDATE pengunjung 
+                SET masa_berlaku = '$tanggal_baru', 
+                    biaya = '$biaya', 
+                    id_pt = " . ($id_pt ? "'$id_pt'" : "NULL") . ",
+                    nama_jenis_pengunjung = '$nama_jenis_pengunjung' 
+                WHERE id_pengunjung = '$id_pengunjung';";
 
-          if (mysqli_query($conn, $query)) {
-              echo '<script>showNotification("Berhasil", "success", "Berhasil perpanjangan")</script>';
-          } else {
-              echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: ' . mysqli_error($conn) . '")</script>';
-          }
+      if (mysqli_query($conn, $query)) {
+        echo '<script>showNotification("Berhasil", "success", "Berhasil perpanjangan")</script>';
       } else {
-          echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: Tanggal baru kosong")</script>';
+        echo '<script>showNotification("Gagal", "danger", "Perpanjangan gagal: ' . mysqli_error($conn) . '")</script>';
       }
+    } else {
+      echo '<script>showNotification("Gagal", "danger", "Tanggal baru harus diisi")</script>';
+    }
   }
 }
-
 ?>
-
-<script>
-  document.getElementById('jumlah_bulan').addEventListener('change', function () {
-    const jumlahBulan = parseInt(this.value);
-    const biayaPerBulan = 150000; // Biaya per bulan
-
-    // Hitung total biaya
-    const totalBiaya = jumlahBulan * biayaPerBulan;
-
-    // Tampilkan total biaya di input biaya
-    document.getElementById('biaya').value = totalBiaya;
-
-    // Update masa berlaku seperti yang sebelumnya
-    const masaBerlakuSebelum = document.getElementById('tanggal_awal').value;
-    const tanggalBaru = new Date(masaBerlakuSebelum);
-    tanggalBaru.setMonth(tanggalBaru.getMonth() + jumlahBulan);
-    const formattedDate = tanggalBaru.toISOString().split('T')[0];
-    document.getElementById('masa_berlaku').value = formattedDate;
-  });
-</script>

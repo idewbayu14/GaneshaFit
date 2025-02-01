@@ -1,7 +1,7 @@
 <?php
-
 include 'koneksi.php';
 $id_petugas = $_SESSION['id_petugas'];
+
 function buatIdKunjungan($prefix, $length = 8)
 {
   $timestamp = date('YmdHis');
@@ -16,6 +16,7 @@ function buatIdKunjungan($prefix, $length = 8)
 
   return $idKunjungan;
 }
+
 if (isset($_POST['masuk'])) {
 
   date_default_timezone_set('Asia/Jakarta');
@@ -75,10 +76,7 @@ if (isset($_POST['masuk'])) {
   }
 }
 
-
 ?>
-
-
 
 <h3 class="fw-bold mb-3">Kedatangan <i class="fas fa-check-circle" style="color: tomato"></i></h3>
 <h6 class="op-7 mb-2">Halaman Masuk dan Keluar pengunjung</h6>
@@ -99,7 +97,6 @@ if (isset($_POST['masuk'])) {
       </button>
     </div>
   </form>
-
 </div>
 
 <div class="card">
@@ -138,7 +135,6 @@ if (isset($_POST['masuk'])) {
 
   if (isset($_POST['keluar']) && isset($_POST['id_pengunjung'])) {
     $id_pengunjung = $_POST['id_pengunjung'];
-    
   }
   ?>
 
@@ -166,7 +162,7 @@ if (isset($_POST['masuk'])) {
                 echo '<td>' . $row["id_pengunjung"] . '</td>';
                 echo '<td>' . $row["nama_lengkap"] . '</td>';
                 echo '<td>' . $row["waktu_kunjungan_masuk"] . '</td>';
-                echo "<td><a href='backend/checkout.php?id=".$row["id_kunjungan"]."' class='btn btn-danger'>Keluar</a></td>'";
+                echo "<td><a href='javascript:void(0);' onclick=\"confirmExit('backend/checkout.php?id=".$row["id_kunjungan"]."')\" class='btn btn-danger'>Keluar</a></td>";
                 echo '</tr>';
                 $no++;
               }
@@ -177,7 +173,25 @@ if (isset($_POST['masuk'])) {
           ?>
         </tbody>
       </form>
-
     </table>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function confirmExit(url) {
+    Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: "Anda akan mengeluarkan pengunjung ini!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, keluar!',
+      cancelButtonText: 'Batal',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = url;  // Jika konfirmasi, lanjutkan ke checkout.php
+      }
+    });
+  }
+</script>

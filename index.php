@@ -415,7 +415,7 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
       <footer class="footer">
         <div class="container-fluid d-flex justify-content-between">
           <div class="copyright">
-            2024, made with by
+            2024, made by
             <a href="https://www.instagram.com/hakip_/?utm_source=ig_web_button_share_sheet">5 Trio</a>
           </div>
         </div>

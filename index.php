@@ -21,6 +21,7 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
   <link rel="icon" href="assets/img/logo_barbel.png" type="image/x-icon" />
 
   <!-- Fonts and icons -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="assets/js/plugin/webfont/webfont.min.js"></script>
   <script>
     WebFont.load({
@@ -202,6 +203,33 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
               </a>
             </li>
 
+            <li class="nav-section">
+              <span class="sidebar-mini-icon">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+              <h4 class="text-section">---List Kelola---</h4>
+            </li>
+
+            <li class="nav-item">
+              <a href="index.php?page=kelolaPengunjung">
+                <i class="fas fa-users"></i> <!-- Icon untuk Pengunjung -->
+                <p>Kelola Pengunjung</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="index.php?page=kelolaPersonalTrainer">
+                <i class="fas fa-dumbbell"></i> <!-- Icon untuk Personal Trainer -->
+                <p>Kelola Personal Trainer</p>
+              </a>
+            </li>
+
+            <li class="nav-section">
+              <span class="sidebar-mini-icon">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+              <h4 class="text-section">---LAPORAN---</h4>
+            </li>
+
             <li class="nav-item">
               <a href="index.php?page=laporan">
                 <i class="fas fa-file"></i>
@@ -332,8 +360,13 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
                 break;
               case 'laporan':
                 include 'pages/laporan.php';
-
                 break;
+              case 'kelolaPersonalTrainer':
+                include 'pages/kelolaPersonalTrainer.php';
+                break;
+              case 'kelolaPengunjung':
+                include 'pages/kelolaPengunjung.php';
+                break;   
             }
 
           } else {
@@ -349,9 +382,6 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
                 <a href="index.php?page=pendaftaran" class="btn btn-primary btn-round">Tambah Pengunjung</a>
               </div>
             </div>
-            
-              
-                
                 <div class="card card-primary bg-primary-gradient">
                   <div class="card-body curves-shadow">
                     <h1>' . $hari_ini . '</h1>
@@ -401,15 +431,12 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
 									</div>
 								</div>
 							</div>
-            
-  
             </div>';
           }
           ?>
-
+  
 
         </div>
-
       </div>
 
       <footer class="footer">
@@ -422,6 +449,8 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
       </footer>
     </div>
     <!-- End Custom template -->
+        
+
   </div>
 
   <script>

@@ -1,6 +1,6 @@
 <?php
 
-include 'koneksi.php';
+  include 'koneksi.php';
 $id_petugas = $_SESSION['id_petugas'];
 function buatIdKunjungan($prefix, $length = 8)
 {

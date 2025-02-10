@@ -1,11 +1,25 @@
 <?php
-// Contoh data pengunjung (seharusnya ini berasal dari database)
-$pengunjung = [
-    ['id_pengunjung' => 'PG001', 'nama_lengkap' => 'Andi Wijaya', 'alamat' => 'Jl. Merdeka No. 10', 'no_hp' => '081234567890', 'nama_jenis_pengunjung' => 'Member', 'status' => 'Aktif', 'nama_pt' => 'John Doe'],
-    ['id_pengunjung' => 'PG002', 'nama_lengkap' => 'Siti Nurhaliza', 'alamat' => 'Jl. Raya No. 15', 'no_hp' => '082345678901', 'nama_jenis_pengunjung' => 'Non-Member', 'status' => 'Tidak Aktif', 'nama_pt' => 'Jane Smith'],
-    ['id_pengunjung' => 'PG003', 'nama_lengkap' => 'Budi Santoso', 'alamat' => 'Jl. Alam No. 20', 'no_hp' => '085612345678', 'nama_jenis_pengunjung' => 'Member', 'status' => 'Aktif', 'nama_pt' => 'Mike Johnson'],
-    // Tambahkan data lainnya jika diperlukan
-];
+include 'koneksi.php'; // Termasuk file koneksi
+
+// Query untuk mengambil data pengunjung dan personal trainer dengan alias untuk nama_lengkap
+$query = "SELECT pengunjung.*, personal_trainer.nama_lengkap AS nama_pt
+          FROM pengunjung 
+          LEFT JOIN personal_trainer ON pengunjung.id_pt = personal_trainer.id_pt";  // Mengambil nama personal trainer
+
+$result = $conn->query($query);
+
+// Cek apakah data ditemukan
+if ($result->num_rows > 0) {
+    // Simpan data dalam array
+    $pengunjung = [];
+    while ($row = $result->fetch_assoc()) {
+        $pengunjung[] = $row;
+    }
+} else {
+    $pengunjung = [];
+}
+
+$conn->close(); // Tutup koneksi database
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +44,7 @@ $pengunjung = [
                     <th scope="col">No Handphone</th>
                     <th scope="col">Jenis Pengunjung</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Nama PT</th>
+                    <th scope="col">Nama PT</th>  <!-- Nama Personal Trainer -->
                     <th scope="col">Aksi</th>
                 </tr>
             </thead>
@@ -47,7 +61,7 @@ $pengunjung = [
                             <td>{$v['no_hp']}</td>
                             <td>{$v['nama_jenis_pengunjung']}</td>
                             <td>{$v['status']}</td>
-                            <td>{$v['nama_pt']}</td>
+                            <td>{$v['nama_pt']}</td>  <!-- Nama PT -->
                             <td>
                                 <button class='btn btn-warning btn-sm'>Edit</button>
                                 <button class='btn btn-danger btn-sm'>Hapus</button>

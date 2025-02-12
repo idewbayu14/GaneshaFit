@@ -203,7 +203,7 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
               </a>
             </li>
 
-            <li class="nav-section">
+            <!-- <li class="nav-section">
               <span class="sidebar-mini-icon">
                 <i class="fa fa-ellipsis-h"></i>
               </span>
@@ -212,16 +212,16 @@ $nama_lengkap = $_SESSION['nama_lengkap'];
 
             <li class="nav-item">
               <a href="index.php?page=kelolaPengunjung">
-                <i class="fas fa-users"></i> <!-- Icon untuk Pengunjung -->
+                <i class="fas fa-users"></i> 
                 <p>Kelola Pengunjung</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="index.php?page=kelolaPersonalTrainer">
-                <i class="fas fa-dumbbell"></i> <!-- Icon untuk Personal Trainer -->
+                <i class="fas fa-dumbbell"></i> 
                 <p>Kelola Personal Trainer</p>
               </a>
-            </li>
+            </li> -->
 
             <li class="nav-section">
               <span class="sidebar-mini-icon">
